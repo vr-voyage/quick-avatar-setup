@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://UI/ShapeKeys.gd" type="Script" id=1]
+
+[node name="ShapeKeys" type="HBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 38.0
+margin_right = -4.0
+margin_bottom = -4.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ContainerEditedAnimation" type="VBoxContainer" parent="."]
+margin_right = 1272.0
+margin_bottom = 678.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ContainerEditedAnimation"]
+margin_right = 1272.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="EmotionName" type="LineEdit" parent="ContainerEditedAnimation/HBoxContainer"]
+margin_right = 1141.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 9.0
+
+[node name="ButtonSave" type="Button" parent="ContainerEditedAnimation/HBoxContainer"]
+margin_left = 1145.0
+margin_right = 1272.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 127, 24 )
+size_flags_horizontal = 3
+text = "Save"
+
+[node name="ScrollingList" type="ScrollContainer" parent="ContainerEditedAnimation"]
+margin_top = 28.0
+margin_right = 1272.0
+margin_bottom = 678.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ListShapekeys" type="GridContainer" parent="ContainerEditedAnimation/ScrollingList"]
+margin_right = 1272.0
+margin_bottom = 650.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[connection signal="pressed" from="ContainerEditedAnimation/HBoxContainer/ButtonSave" to="." method="_on_ButtonSave_pressed"]

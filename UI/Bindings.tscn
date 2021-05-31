@@ -1,0 +1,49 @@
+[gd_scene format=2]
+
+[node name="BindingsContainer" type="HBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 38.0
+margin_right = -4.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_right = 161.0
+margin_bottom = 678.0
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+margin_right = 161.0
+margin_bottom = 14.0
+text = "Hands"
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer"]
+margin_top = 18.0
+margin_right = 161.0
+margin_bottom = 58.0
+pressed = true
+text = "Mirror hands"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+margin_top = 62.0
+margin_right = 161.0
+margin_bottom = 100.0
+
+[node name="Both" type="Label" parent="VBoxContainer/VBoxContainer"]
+margin_right = 161.0
+margin_bottom = 14.0
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/VBoxContainer"]
+margin_top = 18.0
+margin_right = 161.0
+margin_bottom = 38.0
+columns = 3
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/VBoxContainer/GridContainer"]
+margin_right = 29.0
+margin_bottom = 20.0
