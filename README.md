@@ -71,6 +71,16 @@ those two will require database support for the configuration, IMHO.
 Also, I need to restate this :
 **THIS IS AN ALPHA VERSION. THINGS MIGHT GO HORRIBLY WRONG.**
 
+Installing
+------------
+
+Just download the latest release (either **QuickAvatarSetup-Release.zip**
+or **QuickAvatarSetup-Debug.zip**. The Debug version open a shell prompt
+alongside, allowing you to see more debug messages.).
+
+Once the archive downloaded, unzip it somewhere. From there, you can
+launch the program, `qas.exe`.
+
 Usage
 --------
 
