@@ -1,10 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://TestModel/theme_main_ui.tres" type="Theme" id=1]
 [ext_resource path="res://TestModel/3DView.tscn" type="PackedScene" id=2]
 [ext_resource path="res://UI/figurine.png" type="Texture" id=3]
 [ext_resource path="res://UI/fightJ.png" type="Texture" id=4]
-[ext_resource path="res://UI/Bindings.tscn" type="PackedScene" id=5]
 [ext_resource path="res://UI/ShapeKeys.tscn" type="PackedScene" id=6]
 [ext_resource path="res://UI/MainUI.gd" type="Script" id=7]
 
@@ -37,12 +36,17 @@ size_flags_stretch_ratio = 0.6
 margin_right = 474.0
 margin_bottom = 56.0
 
-[node name="Button" type="Button" parent="ContainerSplitView/Container3DView/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ContainerSplitView/Container3DView/HBoxContainer"]
+margin_right = 474.0
+margin_bottom = 56.0
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="ContainerSplitView/Container3DView/HBoxContainer/HBoxContainer"]
 margin_right = 62.0
 margin_bottom = 56.0
 icon = ExtResource( 4 )
 
-[node name="Button2" type="Button" parent="ContainerSplitView/Container3DView/HBoxContainer"]
+[node name="Button2" type="Button" parent="ContainerSplitView/Container3DView/HBoxContainer/HBoxContainer"]
 margin_left = 66.0
 margin_right = 128.0
 margin_bottom = 56.0
@@ -74,7 +78,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 tab_align = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ContainerSplitView/ContainerUI"]
+[node name="Emotions" type="VBoxContainer" parent="ContainerSplitView/ContainerUI"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -82,26 +86,26 @@ margin_top = 38.0
 margin_right = -4.0
 margin_bottom = -4.0
 
-[node name="EmotionList" type="ItemList" parent="ContainerSplitView/ContainerUI/VBoxContainer"]
+[node name="EmotionList" type="ItemList" parent="ContainerSplitView/ContainerUI/Emotions"]
 margin_right = 786.0
 margin_bottom = 581.0
 size_flags_vertical = 3
 size_flags_stretch_ratio = 90.0
 
-[node name="ButtonDelete" type="Button" parent="ContainerSplitView/ContainerUI/VBoxContainer"]
+[node name="ButtonDelete" type="Button" parent="ContainerSplitView/ContainerUI/Emotions"]
 margin_top = 585.0
 margin_right = 786.0
 margin_bottom = 611.0
 text = "Delete"
 
-[node name="HSeparator" type="HSeparator" parent="ContainerSplitView/ContainerUI/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="ContainerSplitView/ContainerUI/Emotions"]
 margin_top = 615.0
 margin_right = 786.0
 margin_bottom = 647.0
 size_flags_vertical = 3
 size_flags_stretch_ratio = 5.0
 
-[node name="ButtonAdd" type="Button" parent="ContainerSplitView/ContainerUI/VBoxContainer"]
+[node name="ButtonAdd" type="Button" parent="ContainerSplitView/ContainerUI/Emotions"]
 margin_top = 651.0
 margin_right = 786.0
 margin_bottom = 677.0
@@ -110,11 +114,9 @@ text = "Add"
 [node name="ShapeKeys" parent="ContainerSplitView/ContainerUI" instance=ExtResource( 6 )]
 visible = false
 
-[node name="Bindings" parent="ContainerSplitView/ContainerUI" instance=ExtResource( 5 )]
-visible = false
-
-[connection signal="pressed" from="ContainerSplitView/Container3DView/HBoxContainer/Button" to="." method="_on_Button_pressed"]
-[connection signal="pressed" from="ContainerSplitView/Container3DView/HBoxContainer/Button2" to="." method="_on_Button2_pressed"]
-[connection signal="item_activated" from="ContainerSplitView/ContainerUI/VBoxContainer/EmotionList" to="." method="_on_ItemList_item_activated"]
-[connection signal="item_selected" from="ContainerSplitView/ContainerUI/VBoxContainer/EmotionList" to="." method="_on_EmotionList_item_selected"]
-[connection signal="pressed" from="ContainerSplitView/ContainerUI/VBoxContainer/ButtonAdd" to="." method="_on_ButtonAdd_pressed"]
+[connection signal="pressed" from="ContainerSplitView/Container3DView/HBoxContainer/HBoxContainer/Button" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="ContainerSplitView/Container3DView/HBoxContainer/HBoxContainer/Button2" to="." method="_on_Button2_pressed"]
+[connection signal="item_activated" from="ContainerSplitView/ContainerUI/Emotions/EmotionList" to="." method="_on_ItemList_item_activated"]
+[connection signal="item_selected" from="ContainerSplitView/ContainerUI/Emotions/EmotionList" to="." method="_on_EmotionList_item_selected"]
+[connection signal="pressed" from="ContainerSplitView/ContainerUI/Emotions/ButtonDelete" to="." method="_on_ButtonDelete_pressed"]
+[connection signal="pressed" from="ContainerSplitView/ContainerUI/Emotions/ButtonAdd" to="." method="_on_ButtonAdd_pressed"]

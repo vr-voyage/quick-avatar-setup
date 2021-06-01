@@ -18,3 +18,9 @@ data_*/
 .vs*
 *~
 
+*.glb
+*.glb.import
+*.fbx
+*.fbx.import
+*.material
+

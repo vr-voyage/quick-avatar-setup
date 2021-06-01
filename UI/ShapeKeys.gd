@@ -5,8 +5,12 @@ const threed_view_class = preload("res://TestModel/3DView.gd")
 
 onready var ui_blendshapes_list = $ContainerEditedAnimation/ScrollingList/ListShapekeys
 onready var ui_emotion_name_input = $ContainerEditedAnimation/HBoxContainer/EmotionName
+onready var ui_save_button = $ContainerEditedAnimation/HBoxContainer/ButtonSave
 
 signal save_requested(emotion_name)
+
+func _ready():
+	ui_save_button.disabled = true
 
 func clear_list():
 	var children = ui_blendshapes_list.get_children()
@@ -15,6 +19,7 @@ func clear_list():
 
 func list_blendshapes(blendshapes:threed_view_class.Blendshapes) -> void:
 	clear_list()
+	ui_save_button.disabled = false
 	for blendshape in blendshapes.data:
 		var button = shapekey_button.instance()
 		ui_blendshapes_list.add_child(button)

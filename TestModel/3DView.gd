@@ -166,6 +166,12 @@ class Emotions:
 			emotions.data.append(Emotion.from_serialized(serialized_emotion))
 		return emotions
 
+	func delete_emotion(emotion_idx:int) -> bool:
+		var can_remove:bool = emotion_idx < len(data)
+		if can_remove:
+			data.remove(emotion_idx)
+		return can_remove
+
 var model_blendshapes:Blendshapes
 
 func get_blendshapes() -> Blendshapes:
@@ -249,10 +255,46 @@ func current_emotion(emotion:Emotion) -> int:
 	attach_blendshapes(emotion.blendshapes)
 	return emotion.blendshapes.apply_values()
 
+var current_camera
+onready var ui_camera_slider_y = $VBoxContainer/CameraSliderY
+onready var ui_camera_slider_z = $VBoxContainer/CameraSliderZ
+
+func _register_current_camera():
+	current_camera = get_viewport().get_camera()
+
+func _ready():
+	camera_face()
+
+func _on_camera_slider_y_value_changed(val:float):
+	current_camera.transform.origin.y = val
+
+func _on_camera_slider_z_value_changed(val:float):
+	current_camera.transform.origin.z = val
+
+func _setup_sliders_for_current_camera() -> void:
+	# FIXME ... This should not be set here
+	_register_current_camera()
+	if (current_camera == null):
+		printerr("!!!? There's no camera !?")
+		ui_camera_slider_y.visible = false
+		ui_camera_slider_z.visible = false
+		return
+
+	ui_camera_slider_y.disconnect("value_changed", self, "_on_camera_slider_y_value_changed")
+	ui_camera_slider_z.disconnect("value_changed", self, "_on_camera_slider_z_value_changed")
+	var camera_pos:Vector3 = current_camera.transform.origin
+	ui_camera_slider_y.value = camera_pos.y
+	ui_camera_slider_z.value = camera_pos.z
+	ui_camera_slider_y.connect("value_changed", self, "_on_camera_slider_y_value_changed")
+	ui_camera_slider_z.connect("value_changed", self, "_on_camera_slider_z_value_changed")
+
 func camera_face():
 	$CameraFullBody.current = false
 	$CameraFace.current = true
+	_setup_sliders_for_current_camera()
 
 func camera_full_body():
+	
 	$CameraFace.current = false
 	$CameraFullBody.current = true
+	_setup_sliders_for_current_camera()

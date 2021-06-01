@@ -1,6 +1,5 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://TestModel/ookami-pmx-rescaled.tscn" type="PackedScene" id=1]
 [ext_resource path="res://TestModel/3DView.gd" type="Script" id=2]
 
 [sub_resource type="BoxShape" id=1]
@@ -13,9 +12,6 @@
 script = ExtResource( 2 )
 
 [node name="Model" type="Spatial" parent="."]
-
-[node name="ookami-pmx-rescaled" parent="Model" instance=ExtResource( 1 )]
-transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0 )
 
 [node name="StaticBody" type="StaticBody" parent="."]
 transform = Transform( 20.9849, 0, 0, 0, 0.136397, 0, 0, 0, 23.8532, 0, -0.136681, 0 )
@@ -43,3 +39,36 @@ near = 0.01
 
 [node name="CameraFullBody" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.93368, 0.358107, 0, -0.358107, 0.93368, 0, 1.81589, 1.6888 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 24.0
+margin_top = -64.0
+margin_right = -24.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CameraSliderY" type="HSlider" parent="VBoxContainer"]
+margin_right = 1232.0
+margin_bottom = 16.0
+max_value = 3.0
+step = 0.1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+margin_top = 20.0
+margin_right = 1232.0
+margin_bottom = 44.0
+rect_min_size = Vector2( 0, 24 )
+
+[node name="CameraSliderZ" type="HSlider" parent="VBoxContainer"]
+margin_top = 48.0
+margin_right = 1232.0
+margin_bottom = 64.0
+max_value = 2.0
+step = 0.1
