@@ -2,6 +2,10 @@
 # ! USE IT AT YOUR OWN RISK !  
 # MAKE A BACKUP OF ANY MODEL YOU INTEND TO USE THIS TOOL WITH
 
+![Vket Chan N°1](https://raw.githubusercontent.com/vr-voyage/quick-avatar-setup/main/Screenshot.png)
+
+Model used in the screenshot : https://www.v-market.work/ec/items/656/detail/
+
 Quick Avatar Setup
 -------------------------
 
