@@ -179,6 +179,13 @@ func get_blendshapes() -> Blendshapes:
 		refresh_model_blend_shapes()
 	return model_blendshapes
 
+func get_new_blendshapes() -> Blendshapes:
+	var new_blendshapes:Blendshapes = Blendshapes.new()
+	if $Model.get_child_count() > 0:
+		var child = $Model.get_child(0)
+		_search_for_blendshapes_from(child, new_blendshapes, child)
+	return new_blendshapes
+
 func get_blendshapes_reset(attached:bool) -> Blendshapes:
 	var blendshapes:Blendshapes = get_blendshapes()
 	attach_blendshapes(blendshapes)
@@ -210,11 +217,8 @@ func _search_for_blendshapes_from(
 		_search_for_blendshapes_from(child, blendshapes_list, root_node)
 
 func refresh_model_blend_shapes() -> void:
-	var new_blendshapes:Blendshapes = Blendshapes.new()
-	if $Model.get_child_count() > 0:
-		var child = $Model.get_child(0)
-		_search_for_blendshapes_from(child, new_blendshapes, child)
-	model_blendshapes = new_blendshapes
+
+	model_blendshapes = get_new_blendshapes()
 
 func attach_blendshapes(blendshapes:Blendshapes) -> int:
 	var attached_blendshapes:int = 0

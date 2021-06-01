@@ -38,8 +38,7 @@ func load_emotions_or_default(emotions_file_path:String):
 				result.error_string)
 			json_ok = false
 
-		# We expect an Array. If it's not an Array, forget about it
-		if json_ok:
+		if json_ok and result.result is Dictionary and result.result.has("emotions"):
 			emotions = threed_view_class.Emotions.from_serialized(result.result)
 		else:
 			json_ok = false
@@ -112,9 +111,13 @@ func editor_emotions_disable():
 	editor_emotions_set_useable(false)
 
 func enable_editors():
+	editor_emotions_enable()
+
+func disable_editors():
 	editor_emotions_disable()
 
 func _ready():
+	disable_editors()
 	get_tree().connect("files_dropped", self, "_manage_dropped_files")
 	threed_view.connect("model_loading_start", self, "_model_loading_start")
 	threed_view.connect("model_loading_ended", self, "_model_loading_stop")
@@ -129,13 +132,23 @@ func _on_ShapeKeys_save_requested(
 	emotion_new_name:String,
 	emotion:threed_view_class.Emotion):
 
+	printerr("Callig _on_ShapeKeys_save_requested")
 	print(emotion)
+	print(emotion.emotion_name)
+	print(emotion.blendshapes.get_idx(emotion.blendshapes.count() - 1).current_value)
+	print(emotion.blendshapes.get_idx(emotion.blendshapes.count() - 2).current_value)
 	emotion.emotion_name = emotion_new_name
+	threed_view.attach_blendshapes(emotion.blendshapes)
 	emotion.blendshapes.refresh_values()
+	for blendshape in emotion.blendshapes.data:
+		print(blendshape.blendshape_name + " : " + str(blendshape.current_value))
+	
 	if save_emotions(emotions_list) != OK:
 		printerr("Could not save the emotions list")
 	print("Saved emotion : " + emotion.emotion_name)
 	show_emotions_list()
+	print(emotion.blendshapes.get_idx(emotion.blendshapes.count() - 1).current_value)
+	print(emotion.blendshapes.get_idx(emotion.blendshapes.count() - 2).current_value)
 
 func show_emotions_list():
 	$ContainerSplitView/ContainerUI.current_tab = 0
@@ -161,15 +174,17 @@ func _start_editing_emotion(emotion:threed_view_class.Emotion):
 
 func _on_ButtonAdd_pressed():
 	threed_view.reset_emotion()
-	var emotion = emotions_list.add_new(threed_view.get_blendshapes())
+	var emotion = emotions_list.add_new(threed_view.get_new_blendshapes())
 	_start_editing_emotion(emotion)
 
 func _on_ItemList_item_activated(emotion_idx:int):
+	printerr("Calling _on_EmotionList_item_activated")
 	_start_editing_emotion(emotions_list.get_emotion(emotion_idx))
 	pass # Replace with function body.
 
 
 func _on_EmotionList_item_selected(emotion_idx:int):
+	printerr("Calling _on_EmotionList_item_selected")
 	var emotion = emotions_list.get_emotion(emotion_idx)
 	threed_view.current_emotion(emotion)
 	pass # Replace with function body.
