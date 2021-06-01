@@ -172,6 +172,26 @@ class Emotions:
 			data.remove(emotion_idx)
 		return can_remove
 
+class AvatarSetup:
+	const CURRENT_VERSION = 1
+	var emotions:Emotions
+	var version:int = CURRENT_VERSION
+
+	static func from_serialized(serialized_avatar_setup:Dictionary) -> AvatarSetup:
+		var avatar_setup = AvatarSetup.new()
+		avatar_setup.emotions = Emotions.from_serialized(serialized_avatar_setup["emotions"])
+		avatar_setup.version = int(serialized_avatar_setup["version"])
+		return avatar_setup
+
+	func serialize() -> Dictionary:
+		return {
+			"version": version,
+			"emotions": emotions.serialize()
+		}
+
+	func _init():
+		emotions = Emotions.new()
+
 var model_blendshapes:Blendshapes
 
 func get_blendshapes() -> Blendshapes:

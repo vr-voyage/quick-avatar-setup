@@ -5,12 +5,12 @@ onready var shape_keys_editor = $"ContainerSplitView/ContainerUI/ShapeKeys"
 
 const threed_view_class = preload("res://TestModel/3DView.gd")
 
-var emotions_list:threed_view_class.Emotions
+var avatar_setup:threed_view_class.AvatarSetup
 
 onready var ui_emotions_list = $ContainerSplitView/ContainerUI/Emotions/EmotionList
 
 var current_model_filepath:String = ""
-var current_emotions_filepath:String = ""
+var current_avatar_setup_filepath:String = ""
 
 func show_blendshapes():
 	var blendshapes = threed_view.get_blendshapes()
@@ -18,13 +18,13 @@ func show_blendshapes():
 	blendshapes.reset()
 	shape_keys_editor.list_blendshapes(blendshapes)
 
-func load_emotions_or_default(emotions_file_path:String):
+func load_emotions_or_default(avatar_setup_file_path:String):
 	var save_file = File.new()
-	var err = save_file.open(emotions_file_path, File.READ)
+	var err = save_file.open(avatar_setup_file_path, File.READ)
 
 	var could_read_file:bool = (err == OK)
 	var json_ok:bool = true
-	var emotions:threed_view_class.Emotions
+	var saved_setup:threed_view_class.AvatarSetup
 
 	if could_read_file:
 		var content:String = save_file.get_as_text()
@@ -38,45 +38,47 @@ func load_emotions_or_default(emotions_file_path:String):
 				result.error_string)
 			json_ok = false
 
+		# Basic checks
 		if json_ok and result.result is Dictionary and result.result.has("emotions"):
-			emotions = threed_view_class.Emotions.from_serialized(result.result)
+			saved_setup = threed_view_class.AvatarSetup.from_serialized(result.result)
+			# emotions = threed_view_class.Emotions.from_serialized(result.result)
 		else:
 			json_ok = false
 	else:
 		printerr("Could not read emotes.json")
 
 	if not could_read_file or not json_ok:
-		if save_file.open(emotions_file_path, File.WRITE) == OK:
-			save_file.store_string(to_json(threed_view_class.Emotions.new().serialize()))
+		if save_file.open(avatar_setup_file_path, File.WRITE) == OK:
+			save_file.store_string(to_json(threed_view_class.AvatarSetup.new().serialize()))
 			save_file.close()
 			printerr("Recursing")
-			load_emotions_or_default(emotions_file_path)
+			load_emotions_or_default(avatar_setup_file_path)
 			return
 		else:
 			printerr("Could not read the motions files and could not recreate it")
 			return
 
-	emotions_list = emotions
+	avatar_setup = saved_setup
 
-func save_emotions(emotions:threed_view_class.Emotions) -> int:
+func save_setup(avatar_setup:threed_view_class.AvatarSetup) -> int:
 	var save_file:File = File.new()
 	# Note : Do NOT use READ_WRITE, the overwriting might be incomplete, leaving
 	# previous bits of the old save, leading to invalid JSON files
-	var err:int = save_file.open(current_emotions_filepath, File.WRITE)
+	var err:int = save_file.open(current_avatar_setup_filepath, File.WRITE)
 	if err != OK:
 		printerr("Could not save the emotions list")
 		printerr("Error code : " + str(err))
 		return err
 
-	save_file.store_string(to_json(emotions.serialize()))
+	save_file.store_string(to_json(avatar_setup.serialize()))
 	save_file.close()
 
-	print("Emotions saved to " + current_emotions_filepath)
+	print("Emotions saved to " + current_avatar_setup_filepath)
 	return OK
 
 func list_emotions():
 	ui_emotions_list.clear()
-	for emotion in emotions_list.data:
+	for emotion in avatar_setup.emotions.data:
 		ui_emotions_list.add_item(emotion.emotion_name)
 
 func _manage_dropped_files(filepaths:PoolStringArray, screen) -> void:
@@ -93,8 +95,8 @@ func _model_loading_start():
 
 func _model_loading_stop():
 	printerr("Loading model ended")
-	current_emotions_filepath = current_model_filepath + ".emotes.json"
-	load_emotions_or_default(current_emotions_filepath)
+	current_avatar_setup_filepath = current_model_filepath + ".avatar_setup.json"
+	load_emotions_or_default(current_avatar_setup_filepath)
 	list_emotions()
 	editor_emotions_enable()
 
@@ -132,23 +134,14 @@ func _on_ShapeKeys_save_requested(
 	emotion_new_name:String,
 	emotion:threed_view_class.Emotion):
 
-	printerr("Callig _on_ShapeKeys_save_requested")
-	print(emotion)
-	print(emotion.emotion_name)
-	print(emotion.blendshapes.get_idx(emotion.blendshapes.count() - 1).current_value)
-	print(emotion.blendshapes.get_idx(emotion.blendshapes.count() - 2).current_value)
 	emotion.emotion_name = emotion_new_name
 	threed_view.attach_blendshapes(emotion.blendshapes)
 	emotion.blendshapes.refresh_values()
-	for blendshape in emotion.blendshapes.data:
-		print(blendshape.blendshape_name + " : " + str(blendshape.current_value))
-	
-	if save_emotions(emotions_list) != OK:
-		printerr("Could not save the emotions list")
-	print("Saved emotion : " + emotion.emotion_name)
+
+	# FIXME Show a big error popup !
+	if save_setup(avatar_setup) != OK:
+		printerr("Could not save the curernt avatar setup")
 	show_emotions_list()
-	print(emotion.blendshapes.get_idx(emotion.blendshapes.count() - 1).current_value)
-	print(emotion.blendshapes.get_idx(emotion.blendshapes.count() - 2).current_value)
 
 func show_emotions_list():
 	$ContainerSplitView/ContainerUI.current_tab = 0
@@ -164,7 +157,6 @@ func _start_editing_emotion(emotion:threed_view_class.Emotion):
 	var edited_blendshapes:threed_view_class.Blendshapes = threed_view.get_blendshapes()
 	threed_view.attach_blendshapes(edited_blendshapes)
 	shape_keys_editor.edit_emotion(edited_blendshapes, emotion.emotion_name)
-	print("Editing emotion : " + emotion.emotion_name)
 	shape_keys_editor.disconnect(
 		"save_requested", self, "_on_ShapeKeys_save_requested")
 	shape_keys_editor.connect(
@@ -174,29 +166,21 @@ func _start_editing_emotion(emotion:threed_view_class.Emotion):
 
 func _on_ButtonAdd_pressed():
 	threed_view.reset_emotion()
-	var emotion = emotions_list.add_new(threed_view.get_new_blendshapes())
+	var emotion = avatar_setup.emotions.add_new(threed_view.get_new_blendshapes())
 	_start_editing_emotion(emotion)
 
 func _on_ItemList_item_activated(emotion_idx:int):
-	printerr("Calling _on_EmotionList_item_activated")
-	_start_editing_emotion(emotions_list.get_emotion(emotion_idx))
+	_start_editing_emotion(avatar_setup.emotions.get_emotion(emotion_idx))
 	pass # Replace with function body.
 
 
 func _on_EmotionList_item_selected(emotion_idx:int):
-	printerr("Calling _on_EmotionList_item_selected")
-	var emotion = emotions_list.get_emotion(emotion_idx)
+	var emotion = avatar_setup.emotions.get_emotion(emotion_idx)
 	threed_view.current_emotion(emotion)
 	pass # Replace with function body.
 
-
-func _on_CameraSetupButton_pressed():
-	
-	pass # Replace with function body.
-
-
 func _on_ButtonDelete_pressed():
-	emotions_list.delete_emotion(ui_emotions_list.get_selected_items()[0])
+	avatar_setup.emotions.delete_emotion(ui_emotions_list.get_selected_items()[0])
 	list_emotions()
-	save_emotions(emotions_list)
+	save_setup(avatar_setup)
 	pass # Replace with function body.
