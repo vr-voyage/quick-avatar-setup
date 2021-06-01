@@ -6,9 +6,10 @@ var model_helpers = preload("res://helpers/model_helpers.gd")
 
 class Blendshape:
 	# Serialized
-	var rel_path:NodePath        = ""
-	var blendshape_name:String   = ""
-	var current_value:float      = 0
+	var rel_path:NodePath       = ""
+	var blendshape_name:String  = ""
+	var current_value:float     = 0
+	var short_path:String       = ""
 
 	# Private
 	var cached_body:MeshInstance = null
@@ -52,12 +53,14 @@ class Blendshape:
 
 		rel_path = body_rel_path
 		blendshape_name = new_blendshape_name
+		short_path = body_rel_path.get_name(body_rel_path.get_name_count() - 1)
 
 	func serialize() -> Dictionary:
 		return {
 			"blendshape_name": blendshape_name,
 			"rel_path": rel_path,
-			"current_value": current_value
+			"current_value": current_value,
+			"short_path": short_path
 		}
 
 	static func from_serialized(serialized_values:Dictionary) -> Blendshape:

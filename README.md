@@ -23,13 +23,13 @@ This is tool is currently extremely limited.
 I only tested this for myself, so things might go very wrong on the models
 you're trying to use them on.  
 I'm ok with you opening a bug report, but only if the model you're testing
-this on is publicly available and useable for free .
+this on is publicly available and useable without issues.
 
 * **RIGHT NOW, THIS TOOL ONLY SUPPORTS GLB**  
 If you have FBX files, you'll need to convert them using FBX2GLTF tools, or by
 importing them in Blender and reexporting them as GLB.  
 Note that only GLB files are supported at the moment. GLTF support should
-come very soon, along with VRM support should come after that.  
+come very soon, along with VRM support.  
 Native support for FBX might come after.
 
 * **MODEL LOADING IS DONE ON THE MAIN THREAD**  
@@ -39,8 +39,9 @@ Threaded model loading will be added afterwards.
 
 * **SUPPORTED HEIGHT IS LIMITED TO 2.5 meters**  
 Meaning, no Godzilla avatar support at the moment. If you're converting FBX
-files, scale them down before. When using Blender, remember to do
-`CTRL+A -> Apply Scale` before exporting the model.
+files, scale them down before or when exporting them.  
+When using Blender, remember to do `CTRL+A -> Apply Scale` after rescaling,
+before exporting the model.
 
 * **THE CAMERA SETUP IS HORRIBLE**  
 No mouse support, moving down and forward requires to play with the sliders,
@@ -88,3 +89,10 @@ added it.
 * To delete a saved emotion, select it and click on the 'Delete' button.
 * When finished, close the program and use the generated JSON file with an
 appropriate importer.
+
+Importers
+-------------
+
+* For Unity and the VRChat SDK 3.0 : https://github.com/vr-voyage/quick-avatar-setup-importer-vrchat  
+  Note, the SDK is not provided. You need to install it before, and add a
+   VRC Avatar Descriptor before hand.
