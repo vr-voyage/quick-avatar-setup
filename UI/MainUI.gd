@@ -8,6 +8,7 @@ const threed_view_class = preload("res://TestModel/3DView.gd")
 var avatar_setup:threed_view_class.AvatarSetup
 
 onready var ui_emotions_list = $ContainerSplitView/ContainerUI/Emotions/EmotionList
+onready var ui_viewport_spatial = $ContainerSplitView/Container3DView/ContainerViewport/Viewport/Spatial
 
 var current_model_filepath:String = ""
 var current_avatar_setup_filepath:String = ""
@@ -87,7 +88,11 @@ func _manage_dropped_files(filepaths:PoolStringArray, screen) -> void:
 		current_model_filepath = filepath
 		print("Trying to load " + filepath)
 		threed_view.add_glb_model(filepath)
-		
+	
+	if filepath.ends_with(".vrm"):
+		current_model_filepath = filepath
+		threed_view.add_vrm_model(filepath)
+
 	print(filepath)
 
 func _model_loading_start():
@@ -186,4 +191,9 @@ func _on_ButtonDelete_pressed():
 	avatar_setup.emotions.delete_emotion(ui_emotions_list.get_selected_items()[0])
 	list_emotions()
 	save_setup(avatar_setup)
+	pass # Replace with function body.
+
+
+func _on_ContainerViewport_gui_input(event):
+	ui_viewport_spatial._gui_input(event)
 	pass # Replace with function body.

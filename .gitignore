@@ -25,3 +25,5 @@ data_*/
 *.fbx.import
 *.material
 
+vrm_samples/
+test_glbs/

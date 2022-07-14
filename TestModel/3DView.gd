@@ -1,8 +1,13 @@
 extends Spatial
 
+export(float) var rotate_speed = 0.5
+
 onready var model_container:Spatial = $"Model"
 
 var model_helpers = preload("res://helpers/model_helpers.gd")
+onready var camera_pivot:Spatial = $"CameraPivot"
+onready var camera_body:Camera = $"CameraPivot/CameraFullBody"
+onready var camera_face:Camera = $"CameraPivot/CameraFace"
 
 class Blendshape:
 	# Serialized
@@ -255,6 +260,24 @@ signal model_loading_ended()
 
 signal blendshapes_list_changed()
 
+func add_vrm_model(filepath:String) -> void:
+	var vrm_loader = load("res://addons/vrm/vrm_loader.gd").new()
+
+	print("Pouiping VRM very much !")
+	var result:Spatial = vrm_loader.import_vrm(filepath) as Spatial
+	if result == null:
+		printerr("Could not import " + filepath)
+		return
+
+	$Model.remove_child($Model.get_child(0))
+	$Model.add_child(result)
+	result.rotate_y(deg2rad(180))
+	#result.transform.rotated(Vector3.UP, 180)
+	#model_helpers.set_all_mats_to_unshaded(result)
+	refresh_model_blend_shapes()
+	emit_signal("blendshapes_list_changed")
+	emit_signal("model_loading_ended")
+
 func add_glb_model(filepath:String) -> void:
 	var loader = PackedSceneGLTF.new()
 	emit_signal("model_loading_start")
@@ -316,12 +339,52 @@ func _setup_sliders_for_current_camera() -> void:
 	ui_camera_slider_z.connect("value_changed", self, "_on_camera_slider_z_value_changed")
 
 func camera_face():
-	$CameraFullBody.current = false
-	$CameraFace.current = true
+	camera_body.current = false
+	camera_face.current = true
 	_setup_sliders_for_current_camera()
 
 func camera_full_body():
 	
-	$CameraFace.current = false
-	$CameraFullBody.current = true
+	camera_face.current = false
+	camera_body.current = true
 	_setup_sliders_for_current_camera()
+
+var dragging:bool = false
+var panning:bool = false
+var tilting:bool = false
+var click_position:Vector2 = Vector2.ZERO
+
+func _gui_input(event):
+	if event is InputEventMouseButton:
+		var mouse_press:InputEventMouseButton = event as InputEventMouseButton
+		var mouse_button:int = mouse_press.button_index
+		match mouse_button:
+			1:
+				dragging = mouse_press.pressed
+				click_position = mouse_press.position
+			2:
+				tilting = mouse_press.pressed
+			3:
+				panning = mouse_press.pressed
+			4:
+				ui_camera_slider_z.value += (ui_camera_slider_z.step)
+			5:
+				ui_camera_slider_z.value += -(ui_camera_slider_z.step)
+
+
+	if event is InputEventMouseMotion:
+		var motion:InputEventMouseMotion = event
+		if dragging:
+			camera_pivot.rotate_y(deg2rad(-motion.relative.x * rotate_speed))
+		if tilting:
+			current_camera.rotate_x(deg2rad(-motion.relative.y * rotate_speed))
+		if panning:
+			#var direction:float = 1.0 if motion.relative.y > 0 else -1.0
+			ui_camera_slider_y.value += (-motion.relative.y * 0.01)
+		#var current_offset:Vector2 = event.position - click_position
+		#if (current_offset.y < -30) || (current_offset.y > 30):
+			#current_camera.rotate_x(deg2rad(motion.relative.y * rotate_speed))
+		#else:
+
+		
+
