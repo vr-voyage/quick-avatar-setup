@@ -17,12 +17,31 @@ __meta__ = {
 margin_right = 76.0
 margin_bottom = 40.0
 
-[node name="Label" type="Label" parent="."]
+[node name="ShapeKeySlider" type="HSlider" parent="."]
 margin_left = 80.0
+margin_right = 208.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 128, 0 )
+size_flags_vertical = 1
+max_value = 1.0
+step = 0.01
+scrollable = false
+
+[node name="ShapeKeyWeight" type="SpinBox" parent="."]
+margin_left = 212.0
+margin_right = 286.0
+margin_bottom = 40.0
+max_value = 1.0
+step = 0.01
+allow_greater = true
+
+[node name="Label" type="Label" parent="."]
+margin_left = 290.0
 margin_top = 9.0
-margin_right = 174.0
+margin_right = 384.0
 margin_bottom = 31.0
 rect_min_size = Vector2( 94, 22 )
 
 [connection signal="focus_entered" from="." to="." method="_on_ShapekeyTestButton_focus_entered"]
 [connection signal="toggled" from="CheckButton" to="." method="_on_CheckButton_toggled"]
+[connection signal="value_changed" from="ShapeKeyWeight" to="." method="_on_ShapeKeyWeight_value_changed"]

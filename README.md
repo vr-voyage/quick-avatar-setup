@@ -23,16 +23,6 @@ Limitations
 
 This is tool is currently extremely limited.
 
-* **YOU NEED A SPECIAL VERSION OF GODOT TO EDIT IT**
-Actually, you basically need @fire GLTF module, that allows for in-game GLB
-imports. I pushed the version I'm using here, at
-https://github.com/vr-voyage/godot/tree/3.3 . But that basically means
-that you have to know how to [compile Godot for Windows](https://docs.godotengine.org/en/latest/development/compiling/compiling_for_windows.html).  
-I might generate automatic builds of this Godot version, using Github Actions
-in the next days, but meanwhile, you're on your own.  
-This limitation should be removed once I start using @Lyuma VRM plugin
-instead... which might even come before the Github actions.
-
 * **WORKSFORME EDITION**  
 I only tested this for myself, so things might go very wrong on the models
 you're trying to use them on.  

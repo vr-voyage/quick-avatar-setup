@@ -55,7 +55,7 @@ func load_emotions_or_default(avatar_setup_file_path:String):
 			load_emotions_or_default(avatar_setup_file_path)
 			return
 		else:
-			printerr("Could not read the motions files and could not recreate it")
+			printerr("Could not read the emotions files and could not recreate it")
 			return
 
 	avatar_setup = saved_setup
@@ -93,9 +93,12 @@ func _manage_dropped_files(filepaths:PoolStringArray, screen) -> void:
 func _model_loading_start():
 	printerr("Loading model")
 
+func _model_emotes_json_filepath() -> String:
+	return current_model_filepath + ".avatar_setup.json"
+
 func _model_loading_stop():
 	printerr("Loading model ended")
-	current_avatar_setup_filepath = current_model_filepath + ".avatar_setup.json"
+	current_avatar_setup_filepath = _model_emotes_json_filepath()
 	load_emotions_or_default(current_avatar_setup_filepath)
 	list_emotions()
 	editor_emotions_enable()
