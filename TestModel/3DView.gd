@@ -279,11 +279,24 @@ func add_vrm_model(filepath:String) -> void:
 	emit_signal("model_loading_ended")
 
 func add_glb_model(filepath:String) -> void:
-	var loader = PackedSceneGLTF.new()
-	emit_signal("model_loading_start")
-	var result = loader.import_gltf_scene(filepath)
+	var loader:PackedScene = null
+	var gstate:Resource = null
+	var result:Node = null
+	if type_exists("GLTFState") and type_exists("PackedSceneGLTF"):
+		print("GLTF: Using builtin gltf module")
+		gstate = ClassDB.instance("GLTFState")
+		loader = ClassDB.instance("PackedSceneGLTF")
+		emit_signal("model_loading_start")
+		result = loader.import_gltf_scene(filepath, 0, 1000.0, 0, gstate)
+	else:
+		gstate = load("res://addons/godot_gltf/GLTFState.gdns").new()
+		loader = load("res://addons/godot_gltf/PackedSceneGLTF.gdns").new()
+		emit_signal("model_loading_start")
+		result = loader.import_gltf_scene(filepath, 0, 1000.0, gstate)
+
 	if result is Node:
-		$Model.remove_child($Model.get_child(0))
+		if $Model.get_child_count() > 0:
+			$Model.remove_child($Model.get_child(0))
 		$Model.add_child(result)
 		model_helpers.set_all_mats_to_unshaded(result)
 		refresh_model_blend_shapes()
@@ -313,7 +326,7 @@ func _register_current_camera():
 	current_camera = get_viewport().get_camera()
 
 func _ready():
-	camera_face()
+	select_camera_face()
 
 func _on_camera_slider_y_value_changed(val:float):
 	current_camera.transform.origin.y = val
@@ -338,12 +351,12 @@ func _setup_sliders_for_current_camera() -> void:
 	ui_camera_slider_y.connect("value_changed", self, "_on_camera_slider_y_value_changed")
 	ui_camera_slider_z.connect("value_changed", self, "_on_camera_slider_z_value_changed")
 
-func camera_face():
+func select_camera_face():
 	camera_body.current = false
 	camera_face.current = true
 	_setup_sliders_for_current_camera()
 
-func camera_full_body():
+func select_camera_full_body():
 	
 	camera_face.current = false
 	camera_body.current = true
@@ -366,9 +379,9 @@ func _gui_input(event):
 				tilting = mouse_press.pressed
 			3:
 				panning = mouse_press.pressed
-			4:
-				ui_camera_slider_z.value += (ui_camera_slider_z.step)
 			5:
+				ui_camera_slider_z.value += (ui_camera_slider_z.step)
+			4:
 				ui_camera_slider_z.value += -(ui_camera_slider_z.step)
 
 

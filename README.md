@@ -48,10 +48,8 @@ When using Blender, remember to do `CTRL+A -> Apply Scale` after rescaling,
 before exporting the model.
 
 * **THE CAMERA SETUP IS HORRIBLE**  
-No mouse support, moving down and forward requires to play with the sliders,
-it's just horrible.  
-Mouse support will be provided on the next release.  
-Automatic camera setup might take a while, though.
+Barebone mouse support. It's still horrible.  
+Don't expect Automatic camera setup at the moment.
 
 * **ONLY BLENDSHAPES ARE SUPPORTED AT THE MOMENT**  
 Since it's by far the most used feature. The second one being animations with

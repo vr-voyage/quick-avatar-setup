@@ -133,10 +133,10 @@ func _ready():
 	threed_view.connect("model_loading_ended", self, "_model_loading_stop")
 
 func _on_Button_pressed():
-	threed_view.camera_face()
+	threed_view.select_camera_face()
 
 func _on_Button2_pressed():
-	threed_view.camera_full_body()
+	threed_view.select_camera_full_body()
 
 func _on_ShapeKeys_save_requested(
 	emotion_new_name:String,
